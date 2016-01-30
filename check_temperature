@@ -6,16 +6,50 @@ use Getopt::Long;
 
 our $APP_HDDTEMP = '/usr/sbin/hddtemp';
 our $PARAMETER = '';
+our $ARG_LIMIT_MIN = 15;
+our $ARG_LIMIT_MAX = 40;
 
 main();
+
+sub isANumber {
+    my $possibleNumber = shift;
+
+    return 1 if ( $possibleNumber =~ /\d+/ );
+    return 0;
+}
+
+sub parseArguments {
+    GetOptions(
+        '--min=i' => \$ARG_LIMIT_MIN,
+        '--max=i' => \$ARG_LIMIT_MAX,
+        '--disk=s' => \$PARAMETER
+    );
+
+    if ( ! isANumber($ARG_LIMIT_MIN) ) {
+        exitUnknown('Argument --min isn\'t a number');
+    }
+
+    if ( ! isANumber($ARG_LIMIT_MAX) ) {
+        exitUnknown('Argument --max isn\'t a number');
+    }
+
+    if ( $ARG_LIMIT_MIN <= 0 ) {
+        exitUnknown('Argument --min can\'t be 0 or below');
+    }
+
+    if ( $ARG_LIMIT_MAX <= 0 ) {
+        exitUnknown('Argument --max can\'t be 0 or below');
+    }
+
+    if ( $ARG_LIMIT_MIN >= $ARG_LIMIT_MAX ) {
+        exitUnknown('Argument --min is greater than --max');
+    }
+}
 
 sub main {
 
   checkEnvironment();
-
-  GetOptions(
-    '--disk=s' => \$PARAMETER
-  );
+  parseArguments();
 
   my $output = `$APP_HDDTEMP /dev/$PARAMETER`;
 
