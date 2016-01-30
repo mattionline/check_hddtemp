@@ -1,5 +1,3 @@
-#/usr/lib/nagios/plugins/check_temperature
-
 #!/usr/bin/perl
 
 use strict;
@@ -46,4 +44,3 @@ sub exitUnknown {
 sub checkEnvironment {
   exitUnknown("Command 'hddtemp' not found in $APP_HDDTEMP") if ( ! -e $APP_HDDTEMP );
 }
-
