@@ -9,8 +9,6 @@ our $PARAMETER = '';
 our $ARG_LIMIT_MIN = 15;
 our $ARG_LIMIT_MAX = 40;
 
-main();
-
 sub isANumber {
     my $possibleNumber = shift;
 
@@ -91,3 +89,5 @@ sub exitCritical {
 sub checkEnvironment {
   exitUnknown("Command 'hddtemp' not found in $APP_HDDTEMP") if ( ! -e $APP_HDDTEMP );
 }
+
+main();
