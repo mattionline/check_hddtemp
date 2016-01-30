@@ -57,12 +57,20 @@ sub main {
   if ( $output =~ m/(\d+)°C$/ ) {
     my $temperatur = $1;
 
-    printf("OK - Temperatur von /dev/%s: %d°C|temperatur=%d\n",
-      $PARAMETER,
-      $temperatur,
-      $temperatur);
-
-    exit(0);
+    if ( $temperatur < $ARG_LIMIT_MIN ) {
+        exitCritical(sprintf('It\'s too cold! Only %d °C!',
+            $temperatur));
+    }
+    elsif ( $temperatur > $ARG_LIMIT_MAX ) {
+        exitCritical(sprintf('It\'s too hot! Over %d °C!',
+            $temperatur));
+    }
+    else {
+        printf("OK - Temperatur von /dev/%s: %d°C|temperatur=%d\n",
+          $PARAMETER,
+          $temperatur,
+          $temperatur);
+    }
   }
   else {
     exit(2);
@@ -73,6 +81,11 @@ sub main {
 sub exitUnknown {
     printf("UNKNOWN - %s\n", shift);
     exit(3);
+}
+
+sub exitCritical {
+    printf("CRITICAL - %s\n", shift);
+    exit(2);
 }
 
 sub checkEnvironment {
