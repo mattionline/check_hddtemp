@@ -58,12 +58,23 @@ sub checkEnvironment {
   exitUnknown("Command 'hddtemp' not found in $APP_HDDTEMP") if ( ! -e $APP_HDDTEMP );
 }
 
+sub fetchTemperature {
+    my $output = `$APP_HDDTEMP /dev/$PARAMETER`;
+
+    if ( $output =~ m/(\d+)°C$/ ) {
+        return $1;
+    }
+    else {
+        exitCritical('Was not able to retrieve temperature');
+    }
+}
+
 sub main {
 
   checkEnvironment();
   parseArguments();
 
-  my $output = `$APP_HDDTEMP /dev/$PARAMETER`;
+
 
   #/dev/sda: KINGSTON SV300S37A120G: 12°C
   if ( $output =~ m/(\d+)°C$/ ) {
@@ -85,7 +96,7 @@ sub main {
     }
   }
   else {
-    exit(2);
+
   }
 
 }
