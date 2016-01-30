@@ -55,7 +55,9 @@ sub parseArguments {
 }
 
 sub checkEnvironment {
-  exitUnknown("Command 'hddtemp' not found in $APP_HDDTEMP") if ( ! -e $APP_HDDTEMP );
+    if ( ! -e $APP_HDDTEMP ) {
+        exitUnknown("Command 'hddtemp' not found in $APP_HDDTEMP");    
+    }
 }
 
 sub fetchTemperature {
