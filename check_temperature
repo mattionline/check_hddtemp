@@ -69,26 +69,38 @@ sub fetchTemperature {
     }
 }
 
+sub buildPerformanceString {
+    my $temperature = shift;
+
+    return sprintf('temperature=%d;%d;%d',
+        $temperature,
+        $ARG_LIMIT_MIN,
+        $ARG_LIMIT_MAX);
+}
+
 sub main {
 
   checkEnvironment();
   parseArguments();
 
   my $temperature = fetchTemperature();
+  my $performanceString = buildPerformanceString($temperature);
 
   if ( $temperature < $ARG_LIMIT_MIN ) {
-      exitCritical(sprintf('It\'s too cold! Only %d °C!',
-          $temperature));
+      exitCritical(sprintf('It\'s too cold! Only %d °C!|%s',
+          $temperature,
+          $performanceString));
   }
   elsif ( $temperature > $ARG_LIMIT_MAX ) {
-      exitCritical(sprintf('It\'s too hot! Over %d °C!',
-          $temperature));
+      exitCritical(sprintf('It\'s too hot! Over %d °C!|%s',
+          $temperature,
+          $performanceString));
   }
   else {
-      printf("OK - Temperature of /dev/%s: %d °C|temperatur=%d\n",
+      printf("OK - Temperature of /dev/%s: %d °C|%s\n",
         $PARAMETER,
         $temperature,
-        $temperature);
+        $performanceString);
   }
 
 }
