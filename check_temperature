@@ -16,6 +16,16 @@ sub isANumber {
     return 0;
 }
 
+sub exitUnknown {
+    printf("UNKNOWN - %s\n", shift);
+    exit(3);
+}
+
+sub exitCritical {
+    printf("CRITICAL - %s\n", shift);
+    exit(2);
+}
+
 sub parseArguments {
     GetOptions(
         '--min=i' => \$ARG_LIMIT_MIN,
@@ -74,16 +84,6 @@ sub main {
     exit(2);
   }
 
-}
-
-sub exitUnknown {
-    printf("UNKNOWN - %s\n", shift);
-    exit(3);
-}
-
-sub exitCritical {
-    printf("CRITICAL - %s\n", shift);
-    exit(2);
 }
 
 sub checkEnvironment {
