@@ -1,0 +1,49 @@
+#/usr/lib/nagios/plugins/check_temperature
+
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Getopt::Long;
+
+our $APP_HDDTEMP = '/usr/sbin/hddtemp';
+our $PARAMETER = '';
+
+main();
+
+sub main {
+
+  checkEnvironment();
+
+  GetOptions(
+    '--disk=s' => \$PARAMETER
+  );
+
+  my $output = `$APP_HDDTEMP /dev/$PARAMETER`;
+
+  #/dev/sda: KINGSTON SV300S37A120G: 12°C
+  if ( $output =~ m/(\d+)°C$/ ) {
+    my $temperatur = $1;
+
+    printf("OK - Temperatur von /dev/%s: %d°C|temperatur=%d\n",
+      $PARAMETER,
+      $temperatur,
+      $temperatur);
+
+    exit(0);
+  }
+  else {
+    exit(2);
+  }
+
+}
+
+sub exitUnknown {
+    printf("UNKNOWN - %s\n", shift);
+    exit(3);
+}
+
+sub checkEnvironment {
+  exitUnknown("Command 'hddtemp' not found in $APP_HDDTEMP") if ( ! -e $APP_HDDTEMP );
+}
+
