@@ -85,7 +85,7 @@ sub main {
           $temperature));
   }
   else {
-      printf("OK - Temperatur von /dev/%s: %d°C|temperatur=%d\n",
+      printf("OK - Temperature of /dev/%s: %d °C|temperatur=%d\n",
         $PARAMETER,
         $temperature,
         $temperature);
