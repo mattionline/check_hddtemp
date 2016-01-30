@@ -54,6 +54,10 @@ sub parseArguments {
     }
 }
 
+sub checkEnvironment {
+  exitUnknown("Command 'hddtemp' not found in $APP_HDDTEMP") if ( ! -e $APP_HDDTEMP );
+}
+
 sub main {
 
   checkEnvironment();
@@ -84,10 +88,6 @@ sub main {
     exit(2);
   }
 
-}
-
-sub checkEnvironment {
-  exitUnknown("Command 'hddtemp' not found in $APP_HDDTEMP") if ( ! -e $APP_HDDTEMP );
 }
 
 main();
